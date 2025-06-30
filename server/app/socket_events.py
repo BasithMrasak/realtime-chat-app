@@ -15,7 +15,7 @@ def register_socket_events(socketio):
             print(f"{username} connected with SID {request.sid}")
 
              # Send only groups user is part of
-            db = current_app.db
+            db = current_app.extensions["mongo_db"]
             groups = db["groups"].find({"members": username})
             group_names = [g["name"] for g in groups]
             emit("group_list_update", group_names, to=request.sid)
@@ -37,7 +37,7 @@ def register_socket_events(socketio):
     @socketio.on("get_users")
     def handle_get_users(data):
         current_user = data.get("current_user")
-        db = current_app.db
+        db = current_app.extensions["mongo_db"]
         users = db["users"].find({"username": {"$ne": current_user}})
         usernames = [user["username"] for user in users]
         emit("user_list", usernames)
@@ -50,7 +50,7 @@ def register_socket_events(socketio):
         message = data.get("message")
         timestamp = datetime.utcnow().isoformat()
 
-        db = current_app.db
+        db = current_app.extensions["mongo_db"]
         db["messages"].insert_one({
             "from_user": from_user,
             "to_user": to_user,
@@ -80,7 +80,7 @@ def register_socket_events(socketio):
         group_name = data.get("group")
         username = data.get("username")
 
-        db = current_app.db
+        db = current_app.extensions["mongo_db"]
         groups_collection = db["groups"]
 
         # Check if group exists
@@ -119,7 +119,7 @@ def register_socket_events(socketio):
         sender = data.get("sender")
         timestamp = datetime.utcnow().isoformat()
 
-        db = current_app.db
+        db = current_app.extensions["mongo_db"]
         db["group_messages"].insert_one({
             "room": room,
             "sender": sender,

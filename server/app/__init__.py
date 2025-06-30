@@ -19,8 +19,8 @@ def create_app():
     app.db = client["chat_db"]
     
     app.extensions = getattr(app, 'extensions', {})
-    app.extensions['mongo_db'] = db
-    
+    app.extensions['mongo_db'] = mongo_db
+
     # ✅ Register Flask blueprint
     from .routes import main
     app.register_blueprint(main)

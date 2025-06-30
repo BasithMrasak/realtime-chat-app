@@ -17,7 +17,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        db = current_app.db
+        db = current_app.extensions["mongo_db"]
         user = db["users"].find_one({"username": username, "password": password})
 
         if user:
@@ -43,7 +43,7 @@ def register():
         display_name = request.form.get('display_name')
         password = request.form.get('password')
 
-        db = current_app.db
+        db = current_app.extensions["mongo_db"]
         users_collection = db["users"]
 
         # Check if username already exists
@@ -74,7 +74,7 @@ def chat():
 
 @main.route('/chat-data')
 def chat_data():
-    db = current_app.db
+    db = current_app.extensions["mongo_db"]
     messages = db["messages"].find().sort("timestamp", 1)
 
     chat_data = []
@@ -92,7 +92,7 @@ def chat_history(with_user):
         return [], 401
 
     current_user = session['username']
-    db = current_app.db
+    db = current_app.extensions["mongo_db"]
     messages = db["messages"].find({
         "$or": [
             {"from_user": current_user, "to_user": with_user},
@@ -109,7 +109,7 @@ def chat_history(with_user):
 
 @main.route('/room-history/<room_name>')
 def room_history(room_name):
-    db = current_app.db
+    db = current_app.extensions["mongo_db"]
     messages = db["group_messages"].find({"room": room_name}).sort("timestamp", 1)
 
     return [{
@@ -123,7 +123,7 @@ def profile():
     if 'username' not in session:
         return redirect(url_for('main.login'))
 
-    db = current_app.db
+    db = current_app.extensions["mongo_db"]
     users = db["users"]
     current_user = users.find_one({"username": session["username"]})
 
