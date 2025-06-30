@@ -3,7 +3,7 @@ from bson.objectid import ObjectId
 from flask import session
 from flask import current_app
 
-db = current_app.extensions['mongo_db']
+
 
 main = Blueprint('main', __name__)
 
