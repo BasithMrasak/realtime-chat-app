@@ -6,29 +6,28 @@ from flask_socketio import SocketIO
 from pymongo import MongoClient
 import os
 
-# ✅ Global SocketIO instance
+# Global SocketIO instance
 socketio = SocketIO()
+
+# Global MongoDB instance (clean and simple)
+mongo_client = MongoClient(os.environ.get("MONGO_URI", "mongodb://localhost:27017/"))
+mongo_db = mongo_client["chat_db"]
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
 
-    # ✅ MongoDB connection using MONGO_URI from environment
-    mongo_uri = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
-    client = MongoClient(mongo_uri)
-    app.db = client["chat_db"]
-    
-    app.extensions = getattr(app, 'extensions', {})
-    app.extensions['mongo_db'] = mongo_db
+    # ✅ Store db directly on app object (best for small Flask apps)
+    app.db = mongo_db
 
-    # ✅ Register Flask blueprint
+    # ✅ Register blueprints
     from .routes import main
     app.register_blueprint(main)
 
-    # ✅ Attach SocketIO to app
+    # ✅ Init SocketIO
     socketio.init_app(app)
 
-    # ✅ Register socket event handlers
+    # ✅ Register socket events
     from .socket_events import register_socket_events
     register_socket_events(socketio)
 
