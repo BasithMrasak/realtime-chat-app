@@ -14,10 +14,13 @@ def create_app():
     app.config['SECRET_KEY'] = 'your_secret_key'
 
     # ✅ MongoDB connection using MONGO_URI from environment
-    # mongo_uri = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
-    # client = MongoClient(mongo_uri)
-    # app.db = client["chat_db"]
-    client = MongoClient(os.environ["MONGO_URI"])
+    mongo_uri = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+    client = MongoClient(mongo_uri)
+    app.db = client["chat_db"]
+    
+    app.extensions = getattr(app, 'extensions', {})
+    app.extensions['mongo_db'] = db
+    
     # ✅ Register Flask blueprint
     from .routes import main
     app.register_blueprint(main)

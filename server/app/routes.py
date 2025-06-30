@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from bson.objectid import ObjectId
 from flask import session
+from flask import current_app
+
+db = current_app.extensions['mongo_db']
 
 main = Blueprint('main', __name__)
 
