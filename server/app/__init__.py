@@ -9,25 +9,23 @@ import os
 # Global SocketIO instance
 socketio = SocketIO()
 
-# Global MongoDB instance (clean and simple)
-mongo_client = MongoClient(os.environ.get("MONGO_URI", "mongodb://localhost:27017/"))
-mongo_db = mongo_client["chat_db"]
-
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
 
-    # ✅ Store db directly on app object (best for small Flask apps)
-    app.db = mongo_db
+    # ✅ MongoDB connection (inside app context)
+    mongo_uri = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+    client = MongoClient(mongo_uri)
+    app.db = client["chat_db"]
 
-    # ✅ Register blueprints
+    # ✅ Register Blueprints
     from .routes import main
     app.register_blueprint(main)
 
     # ✅ Init SocketIO
     socketio.init_app(app)
 
-    # ✅ Register socket events
+    # ✅ Register events
     from .socket_events import register_socket_events
     register_socket_events(socketio)
 
