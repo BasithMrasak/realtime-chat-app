@@ -1,23 +1,24 @@
 import eventlet
 eventlet.monkey_patch()
+
 from flask import Flask
 from flask_socketio import SocketIO
 from pymongo import MongoClient
 import os
 
-client = MongoClient(os.environ["MONGO_URI"])
-db = client["chat_db"]
-
-
-# ✅ Create the SocketIO instance at the top
+# ✅ Global SocketIO instance
 socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
 
+    # ✅ MongoDB connection using MONGO_URI from environment
+    mongo_uri = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+    client = MongoClient(mongo_uri)
+    app.db = client["chat_db"]
 
-    # ✅ Register Blueprint
+    # ✅ Register Flask blueprint
     from .routes import main
     app.register_blueprint(main)
 
