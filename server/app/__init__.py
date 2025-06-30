@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()
 from flask import Flask
 from flask_socketio import SocketIO
 from pymongo import MongoClient
@@ -14,9 +16,9 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
 
-    # # ✅ MongoDB connection
-    # client = MongoClient("mongodb://localhost:27017/")
-    # app.db = client["chat_db"]
+    # ✅ MongoDB connection
+    client = MongoClient("mongodb://localhost:27017/")
+    app.db = client["chat_db"]
 
     # ✅ Register Blueprint
     from .routes import main
