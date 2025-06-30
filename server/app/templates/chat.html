@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chat | Real-Time Chat App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="chat-body">
+    <div class="chat-container">
+        <!-- Sidebar -->
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Chats</h2>
+
+            <div class="current-user">
+                Logged in as: <strong>{{ display_name or username }}</strong><br>
+                <a href="{{ url_for('main.profile') }}" class="profile-link">⚙️ Profile</a>
+            </div>
+
+            <hr>
+
+            <div class="section-title">Groups</div>
+            <ul class="room-list" id="roomList"></ul>
+
+            <button id="toggleRoomFormBtn">➕ New Group</button>
+
+            <div id="roomForm" style="display: none; margin-top: 8px;">
+                <input type="text" id="roomInput" placeholder="Group Name" />
+                <button id="joinRoomBtn">Join</button>
+            </div>
+
+            <hr>
+
+            <div class="section-title">Direct Messages</div>
+            <ul class="chat-list" id="chatList"></ul>
+
+            <hr>
+
+            <a href="{{ url_for('main.logout') }}" class="logout-btn">🚪 Logout</a>
+        </div>
+
+
+        <!-- Chat Window -->
+        <div class="chat-window">
+            <div class="chat-header" id="chatTitle">Chat</div>
+            <div class="chat-messages" id="messages"></div>
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Type a message..." />
+                <button id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+
+    <script>
+        const CURRENT_USER = "{{ username }}";
+        let TO_USER = null;
+        let socket = io({ query: { username: CURRENT_USER } });
+    </script>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+
+</html>

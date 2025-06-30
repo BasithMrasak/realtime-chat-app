@@ -1,0 +1,32 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environment
+venv/
+env/
+
+# Environment variables / secrets
+.env
+config.py
+
+# VSCode and other editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Cache
+*.cache
+*.sqlite3
+
+# Build artifacts
+*.egg-info/
+dist/
+build/

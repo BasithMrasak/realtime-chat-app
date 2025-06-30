@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profile | Real-Time Chat App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .profile-container {
+            max-width: 400px;
+            margin: 60px auto;
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .profile-container h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        .profile-container label {
+            font-weight: 500;
+            color: #444;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .profile-container input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .profile-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-container button:hover {
+            background-color: #1e8c4f;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body class="chat-body">
+    <div class="profile-container">
+        <h2>User Profile</h2>
+
+        <form method="POST">
+            <label>Username:</label>
+            <p><strong>{{ user.username }}</strong></p>
+
+            <label>Display Name:</label>
+            <input type="text" name="display_name" value="{{ user.display_name }}">
+
+            <label>New Password:</label>
+            <input type="password" name="password">
+
+            <button type="submit">Update</button>
+        </form>
+
+        <a href="{{ url_for('main.chat') }}" class="back-link">⬅️ Back to Chat</a>
+    </div>
+</body>
+
+</html>
