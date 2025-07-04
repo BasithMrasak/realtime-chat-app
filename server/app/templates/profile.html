@@ -68,6 +68,15 @@
         }
     </style>
 </head>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-message">
+    {% for msg in messages %}
+    <div class="flash">{{ msg }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 
 <body class="chat-body">
     <div class="profile-container">

@@ -118,12 +118,15 @@ def room_history(room_name):
         "timestamp": msg["timestamp"],
         "room": msg["room"]
     } for msg in messages]
+
+from flask import flash  # ✅ import this
+
 @main.route('/profile', methods=['GET', 'POST'])
 def profile():
     if 'username' not in session:
         return redirect(url_for('main.login'))
 
-    db = current_app.db   
+    db = current_app.db
     users = db["users"]
     current_user = users.find_one({"username": session["username"]})
 
@@ -134,14 +137,14 @@ def profile():
         updates = {}
         if new_display_name and new_display_name != current_user["display_name"]:
             updates["display_name"] = new_display_name
-            session["display_name"] = new_display_name  # Optional: If you show display name elsewhere
+            session["display_name"] = new_display_name
 
         if new_password:
-            updates["password"] = new_password  # ⚠️ Not hashed, per earlier decision
+            updates["password"] = new_password
 
         if updates:
             users.update_one({"username": session["username"]}, {"$set": updates})
+            flash("✅ Profile updated successfully!")  # ✅ Flash message
 
-    # Re-fetch updated user
     user = users.find_one({"username": session["username"]})
     return render_template("profile.html", user=user)
